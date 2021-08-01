@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block navbar %}
+	{% include 'inc/_nav.html' %}
+{% endblock navbar %}
+
+{% block content %}
+	<div>
+		<form action="{% url 'createroom' %}" class="form-group mt-5 text-warning" style="max-width: 600px; margin-left: auto; margin-right: auto;" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form.non_field.errors }}
+			{{ form.as_p }}
+			<button class="btn btn-outline-warning text-warning me-2 " type="submit">Create</button>
+		</form>
+	</div>
+{% endblock content %}

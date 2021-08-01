@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block navbar %}
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="border-radius: 4px;">
+	  <div class="container-fluid justify-content-start">
+	    <a class="navbar-brand" href="#">
+	      <img src="https://www.citypng.com/public/uploads/preview/-11600558714e3lynonybu.png" alt="" width="36" height="27" class="d-inline-block align-text-top">
+	      ChatHub
+	    </a>
+	    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+	        <li class="nav-item">
+	          <a href="{% url 'index' %}"><button class="btn btn-warning btn-outline-dark text-dark me-2 btn-lg" type="button">Home</button></a>
+	        </li>
+	        <li class="nav-item">
+	          <a href="#"><button class="btn btn-warning btn-outline-dark text-dark me-2 btn-lg" type="button">M-Sender</button></a>
+	        </li>
+	        <li class="nav-item">
+	          <a href="#"><button class="btn btn-outline-warning text-warning me-2 " type="button">Contacts</button></a>
+	        </li>
+	        <li class="nav-item">
+	          <a href="{% url 'room' 'General' %}"><button class="btn btn-outline-warning text-warning me-2 " type="button">General</button></a>
+	        </li>
+	      </ul>
+	    </div>
+	    <div id="auth" class="text-warning">
+	      |&nbsp <a href="{% url 'registration' %}"><button class="btn btn-warning btn-outline-dark text-dark me-2 " type="button">Sign in</button></a>
+	    </div>
+	  </div>
+	</nav>
+{% endblock navbar %}
+
+{% block content %}
+	<div>
+		<form action="{% url 'login' %}" class="form-group mt-5 text-warning" style="max-width: 600px; margin-left: auto; margin-right: auto;" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form.non_field.errors }}
+			{{ form.as_p }}
+			<button class="btn btn-outline-warning text-warning me-2 " type="submit">Log in</button>
+		</form>
+	</div>
+{% endblock content %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+    {% include 'inc/_nav.html' %}
+{% endblock navbar %}
+
+{% block content %}
+<div id="chat" style="text-align: center;">
+    <h1 class="text-warning mt-4">{{room_name}}</h1>
+    <div id="text-box" class="">
+        <textarea readonly class="mt-3" style="border-radius: 10px; overflow-y: vertical-align: bottom; auto; border: solid 1px orange;" id="chat-log" cols="100" rows="20"></textarea><br>
+    </div>
+    <input class='mt-2' id="chat-message-input" type="text" size="100"><br>
+    <button class="btn btn-outline-info text-info me-2 btn-lg mt-2" id="chat-message-submit" type="button">Send</button>
+</div>
+{{ room_name|json_script:"room-name" }}
+<script>
+    var textarea = document.getElementById('chat-log');
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + roomName
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector('#chat-log').value += (data.message + '\n');
+        textarea.scrollTop = textarea.scrollHeight;
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock content %}

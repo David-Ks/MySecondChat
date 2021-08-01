@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block navbar %}
+    {% include 'inc/_nav.html' %}
+{% endblock navbar %}
+{% block content %}
+
+
+<form class="mt-5" method="POST" style="text-align: center;">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="room_name"><h1 class="display-6" style="color: orange;">What chat room would you like to enter?</h1></label><br>
+        <input id='room_name' type="text" style="border-radius: 100px 15px 100px 15px;" name='room_name' size="100">
+    </div>
+    <button class="btn btn-warning btn-outline-dark text-dark me-2 btn-lg mt-2" onclick="checkError()" type="submit">Search</button>
+</form>
+<div class="mt-4" style="text-align: center;">
+    <div class="container" style="width: 400px;">
+        {% for room in rooms %}
+            <a href="{% url 'room' room %}"><button id='foo' type="button" class="btn mt-2 btn-dark btn-outline-warning">{{room}}</button></a>
+        {% endfor %}
+    </div>
+</div>
+<div id='Error'></div>
+<script type="text/javascript">
+    alert(JSON.stringify(data));
+    function checkError() {
+        var message = document.getElementById("room_name").value ? document.getElementById("room_name").value : 0;
+        if (message.length <= 1) {
+            alert('Room name length greate then 1');
+        }
+    };
+</script>
+{% endblock content %}
